@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { EquipmentState } from "./App";
+import { useNavigate } from "react-router-dom";
 
 interface StateChangeEvent {
     id: string;
@@ -11,6 +12,7 @@ interface StateChangeEvent {
 }
 
 export default function SupervisorView() {
+    const navigate = useNavigate();
     const [events, setEvents] = useState<StateChangeEvent[]>([]);
 
     useEffect(() => {
@@ -25,8 +27,14 @@ export default function SupervisorView() {
 
     return (
         <main className="min-h-screen bg-stone-50 px-3 py-5 text-black sm:px-4 md:px-6">
-            <div className="mx-auto flex max-w-screen-lg flex-col gap-5">
+            <div className="mx-auto flex max-w-5xl flex-col gap-5">
                 <div className="px-1 sm:px-2">
+                    <button
+                        onClick={() => navigate(-1)}
+                        className="rounded-md border px-3 py-1.5 text-xs sm:text-sm"
+                    >
+                        Back
+                    </button>
                     <h1 className="font-serif text-2xl font-semibold sm:text-3xl">
                         State History
                     </h1>
