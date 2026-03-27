@@ -38,43 +38,43 @@ export default function App() {
 
     return (
         <main className="min-h-screen bg-stone-50 px-3 py-5 text-black sm:px-4 md:px-6">
-            <div className="mx-auto flex max-w-screen-2xl flex-col gap-5 sm:gap-8">
-                <section className="flex flex-wrap items-center gap-x-5 gap-y-3 px-1 text-base font-medium text-black sm:px-2 sm:text-xl md:text-2xl">
-                    <div className="flex items-center gap-3">
-                        <span className="h-4 w-4 rounded-full bg-red-600 sm:h-5 sm:w-5 md:h-6 md:w-6" />
+            <div className="mx-auto flex max-w-screen-2xl flex-col gap-5 sm:gap-6">
+                <section className="flex flex-wrap items-center gap-x-4 gap-y-2 px-1 text-sm font-medium text-black sm:px-2 sm:text-base">
+                    <div className="flex items-center gap-2">
+                        <span className="h-3 w-3 rounded-full bg-red-600" />
                         <span className="font-serif">{redCount} Red</span>
                     </div>
-                    <div className="flex items-center gap-3">
-                        <span className="h-4 w-4 rounded-full bg-amber-700 sm:h-5 sm:w-5 md:h-6 md:w-6" />
+                    <div className="flex items-center gap-2">
+                        <span className="h-3 w-3 rounded-full bg-amber-700" />
                         <span className="font-serif">{yellowCount} Yellow</span>
                     </div>
-                    <div className="flex items-center gap-3">
-                        <span className="h-4 w-4 rounded-full bg-green-700 sm:h-5 sm:w-5 md:h-6 md:w-6" />
+                    <div className="flex items-center gap-2">
+                        <span className="h-3 w-3 rounded-full bg-green-700" />
                         <span className="font-serif">{greenCount} Green</span>
                     </div>
                 </section>
 
-                <section className="grid gap-4 sm:gap-6 md:grid-cols-2 xl:grid-cols-4">
+                <section className="grid gap-3 sm:gap-4 md:grid-cols-2 xl:grid-cols-4">
                     {equipment.map((equipment) => (
                         <div
                             key={equipment.id}
-                            className={`rounded-3xl border-[3px] px-5 py-5 shadow-sm sm:rounded-[1.8rem] sm:border-4 sm:px-7 sm:py-7 lg:px-9 lg:py-8 ${mapCardColor(equipment.state)}`}
+                            className={`rounded-2xl border-2 px-4 py-4 shadow-sm sm:px-5 sm:py-5 ${mapCardColor(equipment.state)}`}
                         >
-                            <div className="flex flex-col gap-4 sm:gap-5">
+                            <div className="flex flex-col gap-3">
                                 <div>
-                                    <h2 className="max-w-48 text-2xl font-semibold leading-tight sm:text-3xl">
+                                    <h2 className="text-xl font-semibold leading-tight sm:text-2xl">
                                         {equipment.name}
                                     </h2>
-                                    <p className="mt-2 text-lg sm:text-2xl">
+                                    <p className="mt-1 text-xs text-stone-400">
                                         tap for details
                                     </p>
                                 </div>
 
                                 <div
-                                    className={`flex items-start gap-3 text-lg font-medium sm:items-center sm:text-2xl ${mapStatusTextColor(equipment.state)}`}
+                                    className={`flex items-center gap-2 text-sm font-medium sm:text-base ${mapStatusTextColor(equipment.state)}`}
                                 >
                                     <span
-                                        className={`mt-1 h-5 w-5 shrink-0 rounded-full sm:mt-0 sm:h-7 sm:w-7 ${mapDotColor(equipment.state)}`}
+                                        className={`h-3 w-3 shrink-0 rounded-full ${mapDotColor(equipment.state)}`}
                                     />
                                     <span className="font-serif leading-tight">
                                         {mapStateLabel(equipment.state)}
@@ -82,13 +82,10 @@ export default function App() {
                                 </div>
                             </div>
 
-                            <section className="mt-6 grid grid-cols-3 gap-2 sm:mt-10 sm:gap-3">
+                            <section className="mt-4 flex gap-2">
                                 {equipmentStates.map((state) => (
                                     <Button
-                                        className={mapButtonColor(
-                                            equipment.state,
-                                            state
-                                        )}
+                                        className={`flex-1 text-xs sm:text-sm ${mapButtonColor(equipment.state, state)}`}
                                         key={state}
                                         onClick={() => {}}
                                     >
