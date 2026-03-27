@@ -8,4 +8,8 @@ export type EquipmentEntity = {
 
 export interface EquipmentRepository {
     getAll: () => Promise<EquipmentEntity[]>;
+    updateState: (
+        equipmentId: string,
+        state: EquipmentState
+    ) => Promise<EquipmentEntity | null>;
 }

@@ -1,6 +1,7 @@
 import {
     EquipmentEntity,
-    EquipmentRepository
+    EquipmentRepository,
+    EquipmentState
 } from "../entities/equipment.entity.js";
 
 const seedEquipment: EquipmentEntity[] = [
@@ -15,5 +16,19 @@ export class InMemoryEquipmentRepository implements EquipmentRepository {
 
     async getAll() {
         return this.equipment;
+    }
+
+    async updateState(equipmentId: string, state: EquipmentState) {
+        const equipmentToUpdate = this.equipment.find(
+            (item) => item.id === equipmentId
+        );
+
+        if (!equipmentToUpdate) {
+            return null;
+        }
+
+        equipmentToUpdate.state = state;
+
+        return equipmentToUpdate;
     }
 }
