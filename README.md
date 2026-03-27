@@ -29,10 +29,10 @@ Run both apps in development:
 npm run dev
 ```
 
-| App | URL |
-|-----|-----|
-| Factory Floor | http://localhost:5173 |
-| Supervisor View | http://localhost:5173/supervisor |
+| App | URL                                               |
+|-----|---------------------------------------------------|
+| Factory Floor | http://localhost:5173                             |
+| Supervisor View | http://localhost:5173/supervisor (password: lego) |
 
 ## Tech Stack
 

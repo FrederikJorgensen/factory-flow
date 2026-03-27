@@ -14,8 +14,27 @@ interface StateChangeEvent {
 export default function SupervisorView() {
     const navigate = useNavigate();
     const [events, setEvents] = useState<StateChangeEvent[]>([]);
+    const [isAuthed, setIsAuthed] = useState<boolean>(false);
 
     useEffect(() => {
+        const saved = sessionStorage.getItem("supervisor-auth");
+
+        if (saved === "true") {
+            setIsAuthed(true);
+            return;
+        }
+
+        const input = window.prompt("Enter password");
+
+        if (input === "lego") {
+            sessionStorage.setItem("supervisor-auth", "true");
+            setIsAuthed(true);
+        }
+    }, []);
+
+    useEffect(() => {
+        if (!isAuthed) return;
+
         fetch("/api/factory-floor/history")
             .then(
                 (response) =>
@@ -23,7 +42,11 @@ export default function SupervisorView() {
             )
             .then((data) => setEvents(data.events))
             .catch(() => setEvents([]));
-    }, []);
+    }, [isAuthed]);
+
+    if (!isAuthed) {
+        return null;
+    }
 
     return (
         <main className="min-h-screen bg-stone-50 px-3 py-5 text-black sm:px-4 md:px-6">
