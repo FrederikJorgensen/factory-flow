@@ -28,6 +28,45 @@ export default function App() {
             });
     }, []);
 
+    async function updateEquipmentState(
+        equipmentId: string,
+        nextState: EquipmentState
+    ) {
+        try {
+            const response = await fetch("/api/factory-floor/state", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    equipmentId,
+                    state: nextState
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to update equipment state");
+            }
+
+            const data = (await response.json()) as {
+                equipment: Equipment;
+            };
+
+            setEquipment((current) =>
+                current.map((item) =>
+                    item.id === equipmentId
+                        ? {
+                              ...item,
+                              state: data.equipment.state
+                          }
+                        : item
+                )
+            );
+        } catch (error) {
+            console.error("Failed to update equipment state:", error);
+        }
+    }
+
     const redCount = equipment.filter((item) => item.state === "red").length;
     const yellowCount = equipment.filter(
         (item) => item.state === "yellow"
@@ -87,7 +126,12 @@ export default function App() {
                                     <Button
                                         className={`flex-1 text-xs sm:text-sm ${mapButtonColor(equipment.state, state)}`}
                                         key={state}
-                                        onClick={() => {}}
+                                        onClick={() => {
+                                            void updateEquipmentState(
+                                                equipment.id,
+                                                state
+                                            );
+                                        }}
                                     >
                                         {mapShortLabel(state)}
                                     </Button>
