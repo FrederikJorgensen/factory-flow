@@ -31,4 +31,9 @@ export class InMemoryEquipmentRepository implements EquipmentRepository {
 
         return equipmentToUpdate;
     }
+
+    async getById(id: string) {
+        const equipment = this.equipment.find((e) => e.id === id);
+        return equipment ? { ...equipment } : null;
+    }
 }

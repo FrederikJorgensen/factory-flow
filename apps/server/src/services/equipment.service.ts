@@ -8,14 +8,47 @@ type UpdateEquipmentStateInput = {
     state: EquipmentState;
 };
 
+interface StateChangeEvent {
+    id: string;
+    equipmentId: string;
+    equipmentName: string;
+    fromState: EquipmentState;
+    toState: EquipmentState;
+    timestamp: string;
+}
+
 export class EquipmentService {
+    private events: StateChangeEvent[] = [];
+    private nextId = 1;
+
     constructor(private readonly equipmentRepository: EquipmentRepository) {}
 
     getAll() {
         return this.equipmentRepository.getAll();
     }
 
-    updateState({ equipmentId, state }: UpdateEquipmentStateInput) {
-        return this.equipmentRepository.updateState(equipmentId, state);
+    getHistory() {
+        return this.events;
+    }
+
+    async updateState({ equipmentId, state }: UpdateEquipmentStateInput) {
+        const previous = await this.equipmentRepository.getById(equipmentId);
+        const updated = await this.equipmentRepository.updateState(
+            equipmentId,
+            state
+        );
+
+        if (previous && updated && previous.state !== updated.state) {
+            this.events.push({
+                id: String(this.nextId++),
+                equipmentId,
+                equipmentName: updated.name,
+                fromState: previous.state,
+                toState: updated.state,
+                timestamp: new Date().toISOString()
+            });
+        }
+
+        return updated;
     }
 }

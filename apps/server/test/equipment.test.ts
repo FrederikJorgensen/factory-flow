@@ -31,4 +31,31 @@ describe("Equipment", () => {
 
         assert.strictEqual(equipment.state, updatedEquipment.state);
     });
+
+    it("records history when state is updated", async () => {
+        await equipmentService.updateState({
+            equipmentId: "brick-molder-1",
+            state: "red"
+        });
+
+        const history = equipmentService.getHistory();
+        const lastEvent = history[history.length - 1];
+        assert.ok(history.length > 0, "should have at least one history event");
+        assert.strictEqual(lastEvent.equipmentId, "brick-molder-1");
+        assert.strictEqual(lastEvent.toState, "red");
+        assert.ok(lastEvent.fromState !== undefined);
+    });
+
+    it("does not record history when state is unchanged", async () => {
+        const historySizeBefore = equipmentService.getHistory().length;
+
+        await equipmentService.updateState({
+            equipmentId: "brick-molder-1",
+            state: "red"
+        });
+
+        const historySizeAfter = equipmentService.getHistory().length;
+
+        assert.strictEqual(historySizeBefore, historySizeAfter);
+    });
 });

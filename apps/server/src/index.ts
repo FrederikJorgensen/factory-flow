@@ -47,6 +47,12 @@ app.put("/api/factory-floor/state", async (request, response) => {
     });
 });
 
+app.get("/api/factory-floor/history", (_request, response) => {
+    response.json({
+        events: equipmentService.getHistory()
+    });
+});
+
 const server = http.createServer(app);
 const port = 3000;
 

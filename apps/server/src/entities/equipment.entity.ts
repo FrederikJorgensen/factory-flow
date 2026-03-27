@@ -12,4 +12,5 @@ export interface EquipmentRepository {
         equipmentId: string,
         state: EquipmentState
     ) => Promise<EquipmentEntity | null>;
+    getById: (id: string) => Promise<EquipmentEntity | null>;
 }
