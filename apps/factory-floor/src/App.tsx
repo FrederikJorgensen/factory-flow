@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Button } from "./Button";
+import { Link } from "react-router-dom";
 
 export type EquipmentState = "red" | "yellow" | "green";
 
@@ -91,6 +92,12 @@ export default function App() {
                         <span className="h-3 w-3 rounded-full bg-green-700" />
                         <span className="font-serif">{greenCount} Green</span>
                     </div>
+
+                    <Link to="/supervisor">
+                        <Button className="text-xs sm:text-sm">
+                            Supervisor view ➡️
+                        </Button>
+                    </Link>
                 </section>
 
                 <section className="grid gap-3 sm:gap-4 md:grid-cols-2 xl:grid-cols-4">
