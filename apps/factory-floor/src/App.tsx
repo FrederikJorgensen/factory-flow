@@ -76,6 +76,34 @@ export default function App() {
         (item) => item.state === "green"
     ).length;
 
+    useEffect(() => {
+        const ws = new WebSocket("ws://localhost:3000");
+
+        ws.onmessage = (event) => {
+            const message = JSON.parse(event.data) as {
+                type: string;
+                payload: Equipment;
+            };
+
+            if (message.type === "equipment:update") {
+                setEquipment((current) =>
+                    current.map((item) =>
+                        item.id === message.payload.id
+                            ? {
+                                  ...item,
+                                  state: message.payload.state
+                              }
+                            : item
+                    )
+                );
+            }
+        };
+
+        return () => {
+            ws.close();
+        };
+    }, []);
+
     return (
         <main className="min-h-screen bg-stone-50 px-3 py-5 text-black sm:px-4 md:px-6">
             <div className="mx-auto flex max-w-screen-2xl flex-col gap-5 sm:gap-6">

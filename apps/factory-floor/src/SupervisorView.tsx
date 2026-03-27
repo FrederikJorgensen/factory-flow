@@ -44,6 +44,35 @@ export default function SupervisorView() {
             .catch(() => setEvents([]));
     }, [isAuthed]);
 
+    useEffect(() => {
+        if (!isAuthed) return;
+
+        const ws = new WebSocket("ws://localhost:3000");
+
+        ws.onmessage = (event) => {
+            const message = JSON.parse(event.data) as {
+                type: string;
+                payload: unknown;
+            };
+
+            if (message.type === "equipment:update") {
+                fetch("/api/factory-floor/history")
+                    .then(
+                        (response) =>
+                            response.json() as Promise<{
+                                events: StateChangeEvent[];
+                            }>
+                    )
+                    .then((data) => setEvents(data.events))
+                    .catch(() => setEvents([]));
+            }
+        };
+
+        return () => {
+            ws.close();
+        };
+    }, [isAuthed]);
+
     if (!isAuthed) {
         return null;
     }

@@ -1,6 +1,7 @@
 import http from "node:http";
 import cors from "cors";
 import express from "express";
+import { WebSocketServer } from "ws";
 import { EquipmentEntity, equipmentService } from "./services/index.js";
 
 const app = express();
@@ -41,6 +42,12 @@ app.put("/api/factory-floor/state", async (request, response) => {
         return;
     }
 
+    // broadcast update
+    broadcast({
+        type: "equipment:update",
+        payload: updatedEquipment
+    });
+
     response.json({
         ok: true,
         equipment: updatedEquipment
@@ -54,6 +61,29 @@ app.get("/api/factory-floor/history", (_request, response) => {
 });
 
 const server = http.createServer(app);
+
+const wss = new WebSocketServer({ server });
+
+const clients = new Set<WebSocket>();
+
+wss.on("connection", (ws) => {
+    clients.add(ws);
+
+    ws.on("close", () => {
+        clients.delete(ws);
+    });
+});
+
+function broadcast(message: unknown) {
+    const data = JSON.stringify(message);
+
+    for (const client of clients) {
+        if (client.readyState === client.OPEN) {
+            client.send(data);
+        }
+    }
+}
+
 const port = 3000;
 
 server.listen(port, () => {
