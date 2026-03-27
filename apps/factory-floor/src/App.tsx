@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button } from "./Button";
 
-type EquipmentState = "red" | "yellow" | "green";
+export type EquipmentState = "red" | "yellow" | "green";
 
 export interface Equipment {
     id: string;

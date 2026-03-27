@@ -1,7 +1,9 @@
 {
     "name": "factoryflow",
     "private": true,
-    "workspaces": ["apps/*"],
+    "workspaces": [
+        "apps/*"
+    ],
     "scripts": {
         "dev:server": "npm run dev --workspace @factoryflow/server",
         "dev:factory-floor": "npm run dev --workspace @factoryflow/factory-floor",
@@ -14,5 +16,8 @@
         "prettier": "^3.5.3",
         "tailwindcss": "^4.1.5",
         "typescript": "^5.8.3"
+    },
+    "dependencies": {
+        "react-router-dom": "^7.13.2"
     }
 }
