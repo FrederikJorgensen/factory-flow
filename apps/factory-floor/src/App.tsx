@@ -139,9 +139,6 @@ export default function App() {
                                     <h2 className="text-xl font-semibold leading-tight sm:text-2xl">
                                         {equipment.name}
                                     </h2>
-                                    <p className="mt-1 text-xs text-stone-400">
-                                        tap for details
-                                    </p>
                                 </div>
 
                                 <div
