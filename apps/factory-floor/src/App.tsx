@@ -8,6 +8,8 @@ export interface Equipment {
     id: string;
     name: string;
     state: EquipmentState;
+    currentOrder: { id: string; name: string } | null;
+    scheduledOrders: { id: string; name: string }[];
 }
 
 const equipmentStates: EquipmentState[] = ["red", "yellow", "green"];
@@ -89,10 +91,7 @@ export default function App() {
                 setEquipment((current) =>
                     current.map((item) =>
                         item.id === message.payload.id
-                            ? {
-                                  ...item,
-                                  state: message.payload.state
-                              }
+                            ? { ...item, ...message.payload }
                             : item
                     )
                 );
@@ -150,6 +149,21 @@ export default function App() {
                                     <span className="font-serif leading-tight">
                                         {mapStateLabel(equipment.state)}
                                     </span>
+                                </div>
+
+                                <div className="text-sm text-stone-600">
+                                    <p>
+                                        {equipment.currentOrder?.name ??
+                                            "No active order"}
+                                    </p>
+                                    {equipment.scheduledOrders.map((order) => (
+                                        <p
+                                            key={order.id}
+                                            className="text-stone-400"
+                                        >
+                                            ↳ {order.name}
+                                        </p>
+                                    ))}
                                 </div>
                             </div>
 
