@@ -51,4 +51,8 @@ export class EquipmentService {
 
         return updated;
     }
+
+    async scheduleOrder(input: { equipmentId: string; orderId: string }) {
+        await this.equipmentRepository.scheduleOrder(input);
+    }
 }

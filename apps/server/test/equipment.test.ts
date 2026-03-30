@@ -16,7 +16,8 @@ describe("Equipment", () => {
         const updatedEquipment: EquipmentEntity = {
             id: "brick-molder-1",
             name: "Brick Molder #1",
-            state: "yellow"
+            state: "yellow",
+            scheduledOrders: []
         };
 
         await equipmentService.updateState({
@@ -57,5 +58,21 @@ describe("Equipment", () => {
         const historySizeAfter = equipmentService.getHistory().length;
 
         assert.strictEqual(historySizeBefore, historySizeAfter);
+    });
+
+    it("allows a supervisor to schedule an order to equipment", async () => {
+        const equipmentId = "brick-molder-1";
+        const orderId = "order-1";
+        await equipmentService.scheduleOrder({
+            equipmentId,
+            orderId
+        });
+        const allEquipment = await equipmentService.getAll();
+        const equipment = allEquipment.find((e) => e.id === equipmentId);
+
+        assert.ok(
+            equipment.scheduledOrders.some((o) => o.id === orderId),
+            "should have scheduled order"
+        );
     });
 });

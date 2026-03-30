@@ -60,6 +60,30 @@ app.get("/api/factory-floor/history", (_request, response) => {
     });
 });
 
+app.post("/api/factory-floor/orders", async (request, response) => {
+    const { equipmentId, orderId } = request.body as {
+        equipmentId?: string;
+        orderId?: string;
+    };
+
+    if (!equipmentId || !orderId) {
+        response.status(400).json({
+            ok: false,
+            error: "equipmentId and orderId are required"
+        });
+        return;
+    }
+
+    const updated = await equipmentService.scheduleOrder({
+        equipmentId,
+        orderId
+    });
+
+    broadcast({ type: "equipment:update", payload: updated });
+
+    response.json({ ok: true, equipment: updated });
+});
+
 const server = http.createServer(app);
 
 const wss = new WebSocketServer({ server });
