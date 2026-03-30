@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { EquipmentState } from "./App";
+import { Equipment, EquipmentState } from "./App";
 import { useNavigate } from "react-router-dom";
 
 interface StateChangeEvent {
@@ -15,6 +15,35 @@ export default function SupervisorView() {
     const navigate = useNavigate();
     const [events, setEvents] = useState<StateChangeEvent[]>([]);
     const [isAuthed, setIsAuthed] = useState<boolean>(false);
+
+    const [equipment, setEquipment] = useState<Equipment[]>([]);
+    const [selectedEquipmentId, setSelectedEquipmentId] = useState("");
+    const [orderId, setOrderId] = useState("");
+
+    useEffect(() => {
+        if (!isAuthed) return;
+        fetch("/api/factory-floor/equipment")
+            .then((r) => r.json() as Promise<{ equipment: Equipment[] }>)
+            .then((data) => {
+                console.log("data.equipment: ", data.equipment);
+                setEquipment(data.equipment);
+                setSelectedEquipmentId(data.equipment[0]?.id ?? "");
+            })
+            .catch(() => setEquipment([]));
+    }, [isAuthed]);
+
+    async function handleScheduleOrder() {
+        if (!selectedEquipmentId || !orderId.trim()) return;
+        await fetch("/api/factory-floor/orders", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                equipmentId: selectedEquipmentId,
+                orderId
+            })
+        });
+        setOrderId("");
+    }
 
     useEffect(() => {
         const saved = sessionStorage.getItem("supervisor-auth");
@@ -93,6 +122,40 @@ export default function SupervisorView() {
                     <p className="mt-1 text-xs text-stone-400">
                         All equipment state changes
                     </p>
+                </div>
+
+                <div className="overflow-hidden rounded-2xl border-2 border-stone-200 bg-white shadow-sm p-5">
+                    <h2 className="font-serif text-lg font-semibold mb-3">
+                        Schedule Order
+                    </h2>
+                    <div className="flex gap-2 flex-wrap">
+                        <select
+                            value={selectedEquipmentId}
+                            onChange={(e) =>
+                                setSelectedEquipmentId(e.target.value)
+                            }
+                            className="rounded-md border px-3 py-1.5 text-sm"
+                        >
+                            {equipment.map((e) => (
+                                <option key={e.id} value={e.id}>
+                                    {e.name}
+                                </option>
+                            ))}
+                        </select>
+                        <input
+                            type="text"
+                            placeholder="Order id"
+                            value={orderId}
+                            onChange={(e) => setOrderId(e.target.value)}
+                            className="rounded-md border px-3 py-1.5 text-sm flex-1"
+                        />
+                        <button
+                            onClick={() => void handleScheduleOrder()}
+                            className="rounded-md border px-3 py-1.5 text-sm font-medium"
+                        >
+                            Schedule
+                        </button>
+                    </div>
                 </div>
 
                 <div className="overflow-hidden rounded-2xl border-2 border-stone-200 bg-white shadow-sm">
