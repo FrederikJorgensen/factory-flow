@@ -66,5 +66,6 @@ export class InMemoryEquipmentRepository implements EquipmentRepository {
             id: input.orderId,
             name: `Order ${input.orderId} for ${equipment.name}`
         });
+        return equipment;
     }
 }

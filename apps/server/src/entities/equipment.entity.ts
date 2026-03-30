@@ -17,5 +17,5 @@ export interface EquipmentRepository {
     scheduleOrder: (input: {
         equipmentId: string;
         orderId: string;
-    }) => Promise<void>;
+    }) => Promise<EquipmentEntity>;
 }

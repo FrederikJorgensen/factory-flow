@@ -53,6 +53,6 @@ export class EquipmentService {
     }
 
     async scheduleOrder(input: { equipmentId: string; orderId: string }) {
-        await this.equipmentRepository.scheduleOrder(input);
+        return await this.equipmentRepository.scheduleOrder(input);
     }
 }
