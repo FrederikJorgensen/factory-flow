@@ -49,7 +49,15 @@ export class EquipmentService {
             });
         }
 
-        return updated;
+        if (
+            state === "green" &&
+            updated &&
+            updated.scheduledOrders.length > 0
+        ) {
+            await this.equipmentRepository.promoteNextOrder(equipmentId);
+        }
+
+        return this.equipmentRepository.getById(equipmentId);
     }
 
     async scheduleOrder(input: { equipmentId: string; orderId: string }) {

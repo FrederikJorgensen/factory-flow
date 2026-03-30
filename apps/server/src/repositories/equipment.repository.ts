@@ -68,4 +68,10 @@ export class InMemoryEquipmentRepository implements EquipmentRepository {
         });
         return equipment;
     }
+
+    async promoteNextOrder(equipmentId: string) {
+        const equipment = this.equipment.find((e) => e.id === equipmentId);
+        if (!equipment) throw new Error("Equipment not found");
+        equipment.currentOrder = equipment.scheduledOrders.shift();
+    }
 }

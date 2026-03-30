@@ -1,10 +1,12 @@
 export type EquipmentState = "red" | "yellow" | "green";
 
+type Order = { id: string; name: string };
 export type EquipmentEntity = {
     id: string;
     name: string;
     state: EquipmentState;
-    scheduledOrders: { id: string; name: string }[];
+    scheduledOrders: Order[];
+    currentOrder?: Order;
 };
 
 export interface EquipmentRepository {
@@ -18,4 +20,5 @@ export interface EquipmentRepository {
         equipmentId: string;
         orderId: string;
     }) => Promise<EquipmentEntity>;
+    promoteNextOrder: (equipmentId: string) => Promise<void>;
 }

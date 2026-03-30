@@ -75,4 +75,21 @@ describe("Equipment", () => {
             "should have scheduled order"
         );
     });
+
+    it("promotes the first scheduled order when equipment turns green", async (t) => {
+        const equipmentId = "brick-molder-1";
+        const orderId = "order-1";
+        await equipmentService.scheduleOrder({
+            equipmentId,
+            orderId
+        });
+        await equipmentService.updateState({
+            equipmentId,
+            state: "green"
+        });
+        const allEquipment = await equipmentService.getAll();
+        const equipment = allEquipment.find((e) => e.id === equipmentId);
+        assert.strictEqual(equipment.currentOrder?.id, "order-1");
+        assert.strictEqual(equipment.scheduledOrders.length, 0);
+    });
 });
